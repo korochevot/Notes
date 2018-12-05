@@ -3,7 +3,7 @@ import axios from 'axios';
 import { stringify } from 'querystring';
 import styled from 'styled-components'
 
-const Popup = styled.div`
+const FormPopupBlock = styled.div`
 	visibility: ${props => props.fade ? 'hidden' : 'visible'};
 `
 
@@ -54,16 +54,24 @@ const FormSubmit = styled.button`
 	font-size: 24px;
 `
 
-class Form extends Component {
+const ClosePopup = styled.span`
+	position: absolute;
+	top: 5px;
+	right: 7px;
+	font-size: 25px;
+	cursor: pointer;
+`
+
+class FormPopup extends Component {
 	state = {
 		articles: [],
 		title: '',
 		text: '',
-		visible: this.props.visible,
+		formVisibility: this.props.formVisibility,
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({ visible: nextProps.visible });
+	componentWillReceiveProps = (nextProps) => {
+		this.setState({ formVisibility: nextProps.formVisibility });
 	}
 
 	handleChangeTitle = (event) => {
@@ -84,40 +92,43 @@ class Form extends Component {
 
 		axios.post('http://localhost:3012/', stringify(newArticle))
 			.then(res => {
-				this.props.addArticle(res.data)
+				this.props.addArticle(res.data);
+				this.hideFormPopup();
 			})
-		
-		this.setState({
-			visible: false,
-		})
+			.catch((err) => {
+				console.log(err);
+			});
 	}
 
-	hidePopup = () =>{
-		this.setState({
-			visible: false,
-		})
+	hideFormPopup = () => {
+		this.setState({ formVisibility: !this.state.formVisibility });
+		this.setState({ title: '' });
+		this.setState({ text: '' });
 	}
 
 	render() {
 		return (
-			<Popup fade={!this.state.visible}>
-				<Overlay onClick={this.hidePopup}/>
+			<FormPopupBlock fade={!this.state.formVisibility}>
+				<Overlay onClick={this.hideFormPopup} />
 				<FormBlock onSubmit={this.addArticle}>
-					<FormInput 
+					<ClosePopup onClick={this.hideFormPopup}>X</ClosePopup>
+					<FormInput
+						value={this.state.title}
 						type="text"
 						name="title"
 						onChange={this.handleChangeTitle}
-						required/>
+						required />
 					<FormArea
+						value={this.state.text}
 						type="text"
 						name="text"
 						onChange={this.handleChangeText}
-						required/>
+						required />
 					<FormSubmit type="submit">Add</FormSubmit>
 				</FormBlock>
-			</Popup>
+			</FormPopupBlock>
 		)
 	}
 }
 
-export default Form;
+export default FormPopup;

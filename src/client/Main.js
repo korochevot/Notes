@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 import axios from 'axios';
-import Form from './Form';
-import Notes from './Notes';
+import FormPopup from './FormPopup';
+import Articles from './Articles';
 
 const MainBlock = styled.div`
 	color: #ffffff;
@@ -16,6 +16,7 @@ const OpenForm = styled.button`
 class Main extends Component {
 	state = {
 		articles: [],
+		formVisibility: false
 	}
 
 	componentDidMount = () => {
@@ -33,16 +34,18 @@ class Main extends Component {
 		this.setState({ articles: [...this.state.articles, this.state.newNote] });
 	}
 
-	showForm = () =>{
-		this.setState({visible: true})
+	showForm = () => {
+		this.setState({ formVisibility: true })
 	}
 
 	render() {
 		return (
 			<MainBlock>
 				<OpenForm onClick={this.showForm}>Add new</OpenForm>
-				<Form visible={this.state.visible} addArticle={this.addArticle}/>
-				<Notes articles={this.state.articles}/>
+				<FormPopup
+					formVisibility={this.state.formVisibility}
+					addArticle={this.addArticle} />
+				<Articles articles={this.state.articles} />
 			</MainBlock>
 		);
 	}

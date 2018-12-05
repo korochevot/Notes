@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Popup from './Popup';
+import SingleArticlePopup from './SingleArticlePopup';
 import styled from 'styled-components'
 
 const ArticleBlock = styled.div`
@@ -17,20 +17,22 @@ const Article = styled.div`
 	}
 `
 
-class Notes extends Component {
+class Articles extends Component {
 	state = {
 		articles: this.props.articles,
-		singleArticle: ''
+		singleArticle: '',
+		articleVisibility: false
 	};
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps = (nextProps) => {
 		this.setState({ articles: nextProps.articles });
 	}
 
 	getArticleById = (id) => {
 		axios.get('http://localhost:3012/' + id)
 			.then(res => {
-				this.setState({ singleArticle: res.data })
+				this.setState({ singleArticle: res.data });
+				this.setState({ articleVisibility: true });
 			})
 			.catch((err) => {
 				console.log(err);
@@ -42,9 +44,7 @@ class Notes extends Component {
 			.then(res => {
 				const articlesArray = this.state.articles;
 				articlesArray.splice(index, 1);
-				this.setState({
-					articles: articlesArray
-				});
+				this.setState({ articles: articlesArray });
 			})
 			.catch((err) => {
 				console.log(err);
@@ -67,10 +67,12 @@ class Notes extends Component {
 						</button>
 					</ArticleBlock>
 				)}
-				<Popup article={this.state.singleArticle} />
+				<SingleArticlePopup
+					articleVisibility={this.state.articleVisibility}
+					article={this.state.singleArticle} />
 			</div>
 		)
 	}
 }
 
-export default Notes;
+export default Articles;
