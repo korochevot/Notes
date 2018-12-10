@@ -12,6 +12,7 @@ const Overlay = styled.div`
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
+	z-index: 10;
 `
 
 const ArticlePopup = styled.div`
@@ -21,12 +22,13 @@ const ArticlePopup = styled.div`
 	transform: translate(-50%, -50%);
 	width: 300px;
 	background-color: darkcyan;
+	z-index: 10;
 `
 
 class SingleArticlePopup extends Component {
 	state = {
 		articleData: this.props.article,
-		articleVisibility: this.props.articleVisibility,
+		articleVisibility: this.props.articleVisibility
 	}
 
 	componentWillReceiveProps = (nextProps) => {
@@ -35,7 +37,8 @@ class SingleArticlePopup extends Component {
 	}
 
 	hideArticlePopup = () => {
-		this.setState({ articleVisibility: !this.state.articleVisibility });
+		this.props.hideArticleProp(false);
+		this.setState({ articleVisibility: false });
 	}
 
 	render() {
@@ -45,6 +48,7 @@ class SingleArticlePopup extends Component {
 				<ArticlePopup>
 					<h1>{this.state.articleData.title}</h1> 
 					<p>{this.state.articleData.text}</p>
+					<button onClick={this.hideArticlePopup}>закрыть</button>
 				</ArticlePopup>
 			</ArticlePopupBlock>
 		)

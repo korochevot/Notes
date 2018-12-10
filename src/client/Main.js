@@ -9,8 +9,20 @@ const MainBlock = styled.div`
 	font-family: Arial, Helvetica, sans-serif;
 `
 
-const OpenForm = styled.button`
+const NavBlock = styled.nav`
+	text-align: right;
+	box-shadow: 1px 1px 10px -1px rgba(0,0,0,0.75);
+`
 
+const NavBlockBtn = styled.button`
+	background-color: transparent;
+	color: #fff;
+	padding: 10px 35px;
+	margin: ${props => props.deleteAll ? '20px 20px 20px 0' : '20px'};
+	border: 1px solid #475bc4;
+	border-radius: 20px;	
+	outline: none;
+	cursor: pointer;
 `
 
 class Main extends Component {
@@ -38,11 +50,36 @@ class Main extends Component {
 		this.setState({ formVisibility: true })
 	}
 
+	hideFormProp = (value) =>{
+		this.setState({ formVisibility: value })
+	}
+
+	deleteAll = () => {
+		axios.delete('http://localhost:3012/')
+			.then(res => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		this.setState({ articles: [] });
+	}
+
 	render() {
 		return (
 			<MainBlock>
-				<OpenForm onClick={this.showForm}>Add new</OpenForm>
+				<NavBlock>
+					<NavBlockBtn
+						onClick={this.showForm}>Add new
+					</NavBlockBtn>
+					<NavBlockBtn
+						deleteAll
+						onClick={this.deleteAll}>delete All
+						</NavBlockBtn>
+				</NavBlock>
 				<FormPopup
+					hideFormProp={this.hideFormProp}
 					formVisibility={this.state.formVisibility}
 					addArticle={this.addArticle} />
 				<Articles articles={this.state.articles} />

@@ -14,6 +14,7 @@ const Overlay = styled.div`
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
+	z-index: 10;
 `
 
 const FormBlock = styled.form`
@@ -24,6 +25,7 @@ const FormBlock = styled.form`
 	width: 700px;
 	text-align: center;
 	background: #dd9747;
+	z-index: 100;
 `
 
 const FormInput = styled.input`
@@ -67,7 +69,7 @@ class FormPopup extends Component {
 		articles: [],
 		title: '',
 		text: '',
-		formVisibility: this.props.formVisibility,
+		formVisibility: false,
 	}
 
 	componentWillReceiveProps = (nextProps) => {
@@ -101,7 +103,8 @@ class FormPopup extends Component {
 	}
 
 	hideFormPopup = () => {
-		this.setState({ formVisibility: !this.state.formVisibility });
+		this.props.hideFormProp(false);
+		this.setState({ formVisibility: false });
 		this.setState({ title: '' });
 		this.setState({ text: '' });
 	}

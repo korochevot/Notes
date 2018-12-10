@@ -39,6 +39,10 @@ app.get('/:id', function (req, res) {
         });
 });
 
+app.delete('/', function (req, res) {
+    db.get().collection('notes').remove();
+    
+});
 
 app.delete('/:id', function (req, res) {
     db.get().collection('notes').deleteOne(
