@@ -72,26 +72,23 @@ app.post('/', function (req, res) {
     });
 });
 
-
-//обновление существующей записи по id с сохранение в бд
-//работает только обновление первой по списку строки (в данном случае - title)
-app.put('/:id', function (req, res) {
-    db.get().collection('notes').update(
-        { _id: ObjectID(req.params.id) },
-        { $set: { text: req.body.text } },
-        // {
-        //     upsert: false,
-        //     multi: false
-        // },
-        function (err, result) {
-            if (err) {
-                console.log(err);
-                return res.sendStatus(500);
-            }
-            res.sendStatus(200);
-        }
-    );
-});
+// app.put('/:id', function (req, res) {
+//     db.get().collection('notes').update(
+//         { _id: ObjectID(req.params.id) },
+//         { $set: { text: req.body.text } },
+//         {
+//             upsert: false,
+//             multi: false
+//         },
+//         function (err, result) {
+//             if (err) {
+//                 console.log(err);
+//                 return res.sendStatus(500);
+//             }
+//             res.sendStatus(200);
+//         }
+//     );
+// });
 
 db.connect('mongodb://localhost:27017/myapi', function (err) {
     if (err) {
